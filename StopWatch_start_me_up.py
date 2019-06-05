@@ -31,7 +31,8 @@ class window(Ui_StopWatch_gui):
         self.setupUi(dialog)
         self.label_time.setText("00" + ":" + "00" + ":" + "00")
         self.time_start = time.time()  # save start time of program
-        self.flag = 1
+        self.flag = 1  #flag for timer display to continue to count up when start is pressed after stop is pressed
+        self.flag1 = 1 #flag to make reset button do nothing while the timer is running
         self.time_dif_end = time.time()
         self.time_dif = the_program.time_now - self.time_start
         #================ PUSH BUTTONS Start/Stop/Reset =====================================================#  
@@ -48,20 +49,24 @@ class window(Ui_StopWatch_gui):
         self.timer.setInterval(100)
         self.timer.setTimerType(QtCore.Qt.PreciseTimer)
         self.timer.timeout.connect(self.t_dependent_updates)
-        self.timer.start()   #starts timer        
+        self.timer.start()   #starts timer   
+        self.flag1 = 1
 
 
     def Stop_time(self):
         self.timer.stop()   #stops timer        
         self.time_dif_end = self.time_dif  #saves end time
         self.flag = 0
+        self.flag1 = 0
 
         
     def Reset_time(self):
-        
-        self.label_time.setText("00" + ":" + "00" + ":" + "00")  #resets time display
-        self.flag = 1
-
+        if self.flag1 == 0:
+            self.label_time.setText("00" + ":" + "00" + ":" + "00")  #resets time display
+            self.flag = 1
+        else:
+            None
+            
         
     def t_dependent_updates(self):           #method to update the time display
         if self.flag == 1:
