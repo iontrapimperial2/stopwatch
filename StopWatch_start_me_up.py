@@ -33,7 +33,8 @@ class window(Ui_StopWatch_gui):
         self.time_start = time.time()  # save start time of program
         self.flag = 1
         self.time_dif_end = time.time()
-        #================ PUSH BUTTONS Start/Stop =====================================================#  
+        self.time_dif = the_program.time_now - self.time_start
+        #================ PUSH BUTTONS Start/Stop/Reset =====================================================#  
         self.pushButton_Start.clicked.connect(self.Start_time)
         self.pushButton_Reset.clicked.connect(self.Reset_time)
         self.pushButton_Stop.clicked.connect(self.Stop_time)
@@ -44,33 +45,31 @@ class window(Ui_StopWatch_gui):
         self.time_start = time.time()
         
         self.timer = QtCore.QTimer()
-        self.timer.setInterval(1)
+        self.timer.setInterval(100)
         self.timer.setTimerType(QtCore.Qt.PreciseTimer)
         self.timer.timeout.connect(self.t_dependent_updates)
-        self.timer.start()   #starts timer
-        
+        self.timer.start()   #starts timer        
 
 
     def Stop_time(self):
         self.timer.stop()   #stops timer        
-        self.time_dif_end = the_program.time_now - self.time_start
+        self.time_dif_end = self.time_dif  #saves end time
         self.flag = 0
-        #uptime = datetime.timedelta(seconds=int(self.time_dif_end))  #time when stop is pressed
-       
-        #self.label_time.setText(str(uptime)) #display final time
+
         
     def Reset_time(self):
         
         self.label_time.setText("00" + ":" + "00" + ":" + "00")  #resets time display
         self.flag = 1
+
         
     def t_dependent_updates(self):           #method to update the time display
         if self.flag == 1:
-            time_dif = the_program.time_now - self.time_start
+            self.time_dif = the_program.time_now - self.time_start
         
         else:
-            time_dif = the_program.time_now - self.time_start+ self.time_dif_end
-        uptime = datetime.timedelta(seconds=int(time_dif))
+            self.time_dif = the_program.time_now - self.time_start + self.time_dif_end
+        uptime = datetime.timedelta(seconds=int(self.time_dif))
         
         self.label_time.setText(str(uptime))
         

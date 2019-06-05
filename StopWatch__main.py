@@ -18,7 +18,7 @@ class c_program:
                 
         
         # this value will be updated
-        self.time_now =self.time_now = time.time()
+        self.time_now  = time.time()
         
         #++ scheduled job, updates each 0.1 seconds the time self.time_now +++++++++++++++++++++++++++++#          
         program_scheduler.add_job(self.set_time_now, 'interval', seconds=0.1, id='set_time_now_id')
